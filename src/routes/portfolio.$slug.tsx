@@ -164,7 +164,7 @@ export const Route = createFileRoute("/portfolio/$slug")({
 });
 
 function CasePage() {
-  const c = Route.useLoaderData();
+  const c = Route.useLoaderData() as Case;
 
   return (
     <div className="min-h-screen bg-background">
