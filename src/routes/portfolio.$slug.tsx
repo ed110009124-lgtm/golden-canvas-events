@@ -130,7 +130,7 @@ const cases: Case[] = [
 ];
 
 export const Route = createFileRoute("/portfolio/$slug")({
-  loader: ({ params }) => {
+  loader: ({ params }): Case => {
     const found = cases.find((c) => c.slug === params.slug);
     if (!found) throw notFound();
     return found;

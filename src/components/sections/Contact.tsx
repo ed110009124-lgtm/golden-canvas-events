@@ -53,7 +53,7 @@ export function Contact() {
         >
           <span className="text-[10px] uppercase tracking-wider-luxe text-gold">Contact</span>
           <h2 className="mt-4 font-serif text-4xl md:text-5xl text-white text-balance">
-            Let's Create Something Unforgettable
+            {info.heading}
           </h2>
         </motion.div>
 
