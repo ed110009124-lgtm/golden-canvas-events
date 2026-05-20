@@ -47,7 +47,7 @@ export function Hero({ ready }: { ready: boolean }) {
       </motion.div>
 
       <div className="absolute inset-0 pointer-events-none">
-        <GoldParticles density={220} />
+        <GoldParticles density={80} />
       </div>
 
       <div className="relative z-10 flex-1 flex items-center px-6 lg:px-12 pt-32 pb-24">

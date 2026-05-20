@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BrandIntro } from "@/components/BrandIntro";
 import { Nav } from "@/components/Nav";
 import { Hero } from "@/components/sections/Hero";
@@ -27,22 +27,13 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const [showIntro, setShowIntro] = useState(false);
+  // Intro plays on every fresh mount of "/" — intentional brand moment.
+  const [showIntro, setShowIntro] = useState(true);
   const [ready, setReady] = useState(false);
 
-  useEffect(() => {
-    const played = sessionStorage.getItem("brandIntroPlayed");
-    if (!played) {
-      setShowIntro(true);
-    } else {
-      setReady(true);
-    }
-  }, []);
-
   const handleIntroDone = () => {
-    sessionStorage.setItem("brandIntroPlayed", "1");
     setReady(true);
-    setTimeout(() => setShowIntro(false), 700);
+    setTimeout(() => setShowIntro(false), 600);
   };
 
   return (
