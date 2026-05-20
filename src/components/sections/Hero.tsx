@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { GoldParticles } from "./GoldParticles";
+import { GoldParticles } from "../GoldParticles";
 import heroImg from "@/assets/hero.jpg";
 
 const stats = [
