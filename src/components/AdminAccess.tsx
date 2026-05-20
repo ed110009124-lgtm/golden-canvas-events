@@ -48,8 +48,8 @@ export function AdminAccess() {
     <>
       <button
         onClick={handleDot}
-        aria-label=" "
-        className="fixed bottom-3 left-3 w-1.5 h-1.5 rounded-full bg-gold opacity-20 hover:opacity-60 transition-opacity z-40"
+        aria-label="Admin"
+        className="fixed bottom-4 left-4 w-3 h-3 rounded-full bg-gold opacity-60 hover:opacity-100 shadow-[0_0_12px_rgba(201,168,76,0.6)] hover:shadow-[0_0_18px_rgba(201,168,76,0.9)] transition-all z-40"
       />
 
       <AnimatePresence>

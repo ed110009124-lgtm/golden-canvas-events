@@ -3,13 +3,15 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
-const links = [
-  { label: "About", href: "/#about" },
-  { label: "Services", href: "/#services" },
-  { label: "Portfolio", href: "/#portfolio" },
-  { label: "Team", href: "/team" },
-  { label: "Testimonials", href: "/#testimonials" },
-  { label: "Contact", href: "/#contact" },
+type NavLink = { label: string; to: string; hash?: string };
+
+const links: NavLink[] = [
+  { label: "About", to: "/", hash: "about" },
+  { label: "Services", to: "/", hash: "services" },
+  { label: "Portfolio", to: "/portfolio" },
+  { label: "Team", to: "/team" },
+  { label: "Testimonials", to: "/", hash: "testimonials" },
+  { label: "Contact", to: "/", hash: "contact" },
 ];
 
 export function Nav() {
@@ -36,23 +38,25 @@ export function Nav() {
 
           <div className="hidden lg:flex items-center gap-10">
             {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
+              <Link
+                key={l.label}
+                to={l.to}
+                hash={l.hash}
                 className="text-xs uppercase tracking-luxe text-white/80 hover:text-gold relative group"
               >
                 {l.label}
                 <span className="absolute left-1/2 -bottom-1 h-px bg-gold w-0 group-hover:w-full group-hover:left-0 transition-all duration-300" />
-              </a>
+              </Link>
             ))}
           </div>
 
-          <a
-            href="#contact"
+          <Link
+            to="/"
+            hash="contact"
             className="hidden lg:inline-block px-6 py-3 text-xs uppercase tracking-luxe border border-gold text-gold hover:bg-gold hover:text-background transition-colors"
           >
             Begin Your Vision
-          </a>
+          </Link>
 
           <button
             className="lg:hidden text-white"
@@ -79,22 +83,24 @@ export function Nav() {
           </div>
           <div className="flex-1 flex flex-col items-center justify-center gap-8">
             {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
+              <Link
+                key={l.label}
+                to={l.to}
+                hash={l.hash}
                 onClick={() => setOpen(false)}
                 className="font-serif text-3xl text-white hover:text-gold"
               >
                 {l.label}
-              </a>
+              </Link>
             ))}
-            <a
-              href="#contact"
+            <Link
+              to="/"
+              hash="contact"
               onClick={() => setOpen(false)}
               className="mt-6 px-8 py-3 text-xs uppercase tracking-luxe bg-gold text-background"
             >
               Begin Your Vision
-            </a>
+            </Link>
           </div>
         </motion.div>
       )}

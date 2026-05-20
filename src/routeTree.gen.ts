@@ -12,8 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as AdminDashboardRouteImport } from './routes/admin-dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 import { Route as PortfolioSlugRouteImport } from './routes/portfolio.$slug'
 
 const TermsRoute = TermsRouteImport.update({
@@ -31,6 +33,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortfolioRoute = PortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/admin-dashboard',
   path: '/admin-dashboard',
@@ -41,71 +48,89 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PortfolioSlugRoute = PortfolioSlugRouteImport.update({
-  id: '/portfolio/$slug',
-  path: '/portfolio/$slug',
+const ServicesSlugRoute = ServicesSlugRouteImport.update({
+  id: '/services/$slug',
+  path: '/services/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PortfolioSlugRoute = PortfolioSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => PortfolioRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin-dashboard': typeof AdminDashboardRoute
+  '/portfolio': typeof PortfolioRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/portfolio/$slug': typeof PortfolioSlugRoute
+  '/services/$slug': typeof ServicesSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin-dashboard': typeof AdminDashboardRoute
+  '/portfolio': typeof PortfolioRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/portfolio/$slug': typeof PortfolioSlugRoute
+  '/services/$slug': typeof ServicesSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin-dashboard': typeof AdminDashboardRoute
+  '/portfolio': typeof PortfolioRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/portfolio/$slug': typeof PortfolioSlugRoute
+  '/services/$slug': typeof ServicesSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/admin-dashboard'
+    | '/portfolio'
     | '/privacy'
     | '/team'
     | '/terms'
     | '/portfolio/$slug'
+    | '/services/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin-dashboard'
+    | '/portfolio'
     | '/privacy'
     | '/team'
     | '/terms'
     | '/portfolio/$slug'
+    | '/services/$slug'
   id:
     | '__root__'
     | '/'
     | '/admin-dashboard'
+    | '/portfolio'
     | '/privacy'
     | '/team'
     | '/terms'
     | '/portfolio/$slug'
+    | '/services/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  PortfolioRoute: typeof PortfolioRouteWithChildren
   PrivacyRoute: typeof PrivacyRoute
   TeamRoute: typeof TeamRoute
   TermsRoute: typeof TermsRoute
-  PortfolioSlugRoute: typeof PortfolioSlugRoute
+  ServicesSlugRoute: typeof ServicesSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -131,6 +156,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portfolio': {
+      id: '/portfolio'
+      path: '/portfolio'
+      fullPath: '/portfolio'
+      preLoaderRoute: typeof PortfolioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin-dashboard': {
       id: '/admin-dashboard'
       path: '/admin-dashboard'
@@ -145,23 +177,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/services/$slug': {
+      id: '/services/$slug'
+      path: '/services/$slug'
+      fullPath: '/services/$slug'
+      preLoaderRoute: typeof ServicesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/portfolio/$slug': {
       id: '/portfolio/$slug'
-      path: '/portfolio/$slug'
+      path: '/$slug'
       fullPath: '/portfolio/$slug'
       preLoaderRoute: typeof PortfolioSlugRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PortfolioRoute
     }
   }
 }
 
+interface PortfolioRouteChildren {
+  PortfolioSlugRoute: typeof PortfolioSlugRoute
+}
+
+const PortfolioRouteChildren: PortfolioRouteChildren = {
+  PortfolioSlugRoute: PortfolioSlugRoute,
+}
+
+const PortfolioRouteWithChildren = PortfolioRoute._addFileChildren(
+  PortfolioRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  PortfolioRoute: PortfolioRouteWithChildren,
   PrivacyRoute: PrivacyRoute,
   TeamRoute: TeamRoute,
   TermsRoute: TermsRoute,
-  PortfolioSlugRoute: PortfolioSlugRoute,
+  ServicesSlugRoute: ServicesSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

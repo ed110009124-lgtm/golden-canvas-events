@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export function GoldParticles({ density = 180 }: { density?: number }) {
+export function GoldParticles({ density = 70 }: { density?: number }) {
   const ref = useRef<HTMLCanvasElement>(null);
   const mouse = useRef({ x: -1000, y: -1000 });
 
@@ -11,7 +11,7 @@ export function GoldParticles({ density = 180 }: { density?: number }) {
     if (!ctx) return;
 
     const isMobile = window.innerWidth < 768;
-    const count = isMobile ? Math.floor(density / 2.5) : density;
+    const count = isMobile ? Math.floor(density / 3) : density;
 
     let w = (canvas.width = canvas.offsetWidth * devicePixelRatio);
     let h = (canvas.height = canvas.offsetHeight * devicePixelRatio);
