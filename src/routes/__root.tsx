@@ -73,6 +73,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Luxury event design and production for weddings, corporate galas, and private celebrations." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "Mileyn Events — Luxury Events Crafted With Precision & Elegance" },
+      { name: "twitter:title", content: "Mileyn Events — Luxury Events Crafted With Precision & Elegance" },
+      { property: "og:description", content: "Luxury event design and production for weddings, corporate galas, and private celebrations." },
+      { name: "twitter:description", content: "Luxury event design and production for weddings, corporate galas, and private celebrations." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f5395928-9041-4be6-ada1-d81f3b8dc72a/id-preview-c2fec6a0--6b374fbc-a806-4fc3-b416-7d18cfaa285a.lovable.app-1779277210378.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f5395928-9041-4be6-ada1-d81f3b8dc72a/id-preview-c2fec6a0--6b374fbc-a806-4fc3-b416-7d18cfaa285a.lovable.app-1779277210378.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
