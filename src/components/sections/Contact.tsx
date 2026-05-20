@@ -3,12 +3,22 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Mail, MapPin, Calendar } from "lucide-react";
+import { useSiteContent } from "@/hooks/use-site-content";
+
+const contactDefaults = {
+  heading: "Let's Create Something Unforgettable",
+  email: "hello@mileynevents.com",
+  availability: "By Appointment Only",
+  locations: "New York · London · Dubai",
+};
 
 export function Contact() {
+  const info = useSiteContent("contact", contactDefaults);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +53,7 @@ export function Contact() {
         >
           <span className="text-[10px] uppercase tracking-wider-luxe text-gold">Contact</span>
           <h2 className="mt-4 font-serif text-4xl md:text-5xl text-white text-balance">
-            Let's Create Something Unforgettable
+            {info.heading}
           </h2>
         </motion.div>
 
@@ -94,14 +104,17 @@ export function Contact() {
         </motion.form>
 
         <div className="mt-16 flex flex-wrap items-center justify-center gap-8 text-xs uppercase tracking-luxe text-white/70">
-          <a href="mailto:hello@mileynevents.com" className="flex items-center gap-2 hover:text-gold">
-            <Mail size={14} className="text-gold" /> hello@mileynevents.com
+          <a href={`mailto:${info.email}`} className="flex items-center gap-2 hover:text-gold">
+            <Mail size={14} className="text-gold" />
+            <span>{info.email}</span>
           </a>
           <span className="flex items-center gap-2">
-            <Calendar size={14} className="text-gold" /> By Appointment Only
+            <Calendar size={14} className="text-gold" />
+            <span>{info.availability}</span>
           </span>
           <span className="flex items-center gap-2">
-            <MapPin size={14} className="text-gold" /> New York · London · Dubai
+            <MapPin size={14} className="text-gold" />
+            <span>{info.locations}</span>
           </span>
         </div>
       </div>

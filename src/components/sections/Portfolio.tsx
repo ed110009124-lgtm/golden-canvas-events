@@ -1,14 +1,15 @@
 import { motion } from "framer-motion";
 import { useRef } from "react";
+import { Link } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const works = [
-  { cat: "Luxury Weddings", img: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80" },
-  { cat: "Corporate Gala", img: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1200&q=80" },
-  { cat: "Executive Launch", img: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200&q=80" },
-  { cat: "Birthday Experience", img: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1200&q=80" },
-  { cat: "VIP Celebration", img: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1200&q=80" },
-  { cat: "Destination Event", img: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1200&q=80" },
+  { slug: "luxury-weddings", cat: "Luxury Weddings", img: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80" },
+  { slug: "corporate-gala", cat: "Corporate Gala", img: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1200&q=80" },
+  { slug: "executive-launch", cat: "Executive Launch", img: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200&q=80" },
+  { slug: "birthday-experience", cat: "Birthday Experience", img: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1200&q=80" },
+  { slug: "vip-celebration", cat: "VIP Celebration", img: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1200&q=80" },
+  { slug: "destination-event", cat: "Destination Event", img: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1200&q=80" },
 ];
 
 export function Portfolio() {
@@ -40,33 +41,38 @@ export function Portfolio() {
         style={{ scrollbarWidth: "none" }}
       >
         {works.map((w, i) => (
-          <motion.a
-            key={w.cat}
-            href="#contact"
+          <motion.div
+            key={w.slug}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.6, delay: i * 0.08 }}
-            className="group relative flex-shrink-0 w-[300px] md:w-[400px] h-[500px] snap-start overflow-hidden"
+            className="flex-shrink-0 w-[300px] md:w-[400px] h-[500px] snap-start"
           >
-            <img
-              src={w.img}
-              alt={`${w.cat} — a Mileyn Events signature production`}
-              loading="lazy"
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent group-hover:from-background/80 transition-all duration-500" />
-            <div className="absolute bottom-0 left-0 right-0 p-8">
-              <div className="text-[10px] uppercase tracking-wider-luxe text-gold mb-2">
-                0{i + 1} / 0{works.length}
+            <Link
+              to="/portfolio/$slug"
+              params={{ slug: w.slug }}
+              className="group relative block w-full h-full overflow-hidden"
+            >
+              <img
+                src={w.img}
+                alt={`${w.cat} — a Mileyn Events signature production`}
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent group-hover:from-background/80 transition-all duration-500" />
+              <div className="absolute bottom-0 left-0 right-0 p-8">
+                <div className="text-[10px] uppercase tracking-wider-luxe text-gold mb-2">
+                  0{i + 1} / 0{works.length}
+                </div>
+                <h3 className="font-serif text-2xl md:text-3xl text-white">{w.cat}</h3>
+                <div className="mt-4 inline-flex items-center gap-2 text-xs uppercase tracking-luxe text-white/80 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <span className="border-b border-gold pb-0.5">View Experience</span>
+                  <ChevronRight size={14} className="text-gold" />
+                </div>
               </div>
-              <h3 className="font-serif text-2xl md:text-3xl text-white">{w.cat}</h3>
-              <div className="mt-4 inline-flex items-center gap-2 text-xs uppercase tracking-luxe text-white/80 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <span className="border-b border-gold pb-0.5">View Experience</span>
-                <ChevronRight size={14} className="text-gold" />
-              </div>
-            </div>
-          </motion.a>
+            </Link>
+          </motion.div>
         ))}
       </div>
     </section>

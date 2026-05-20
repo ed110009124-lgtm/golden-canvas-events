@@ -1,15 +1,35 @@
 import { motion } from "framer-motion";
 import { GoldParticles } from "../GoldParticles";
 import heroImg from "@/assets/hero.jpg";
+import { useSiteContent } from "@/hooks/use-site-content";
 
-const stats = [
-  { n: "150+", l: "Events Executed" },
-  { n: "80+", l: "Luxury Celebrations" },
-  { n: "98%", l: "Client Satisfaction" },
-  { n: "12+", l: "Years Experience" },
-];
+type HeroContent = {
+  headline_a: string;
+  headline_b: string;
+  subheadline: string;
+  cta_primary: string;
+  cta_secondary: string;
+  stats: { n: string; l: string }[];
+};
+
+const defaults: HeroContent = {
+  headline_a: "Luxury Events Crafted With",
+  headline_b: "Precision & Elegance",
+  subheadline:
+    "From intimate celebrations to grand experiences, we turn moments into unforgettable memories.",
+  cta_primary: "Book a Consultation",
+  cta_secondary: "Explore Our Experiences",
+  stats: [
+    { n: "150+", l: "Events Executed" },
+    { n: "80+", l: "Luxury Celebrations" },
+    { n: "98%", l: "Client Satisfaction" },
+    { n: "12+", l: "Years Experience" },
+  ],
+};
 
 export function Hero({ ready }: { ready: boolean }) {
+  const c = useSiteContent<HeroContent>("hero", defaults);
+
   return (
     <section className="relative min-h-screen w-full overflow-hidden flex flex-col">
       <motion.div
@@ -39,9 +59,9 @@ export function Hero({ ready }: { ready: boolean }) {
             className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white text-balance leading-[1.05]"
             style={{ letterSpacing: "0.01em" }}
           >
-            Luxury Events Crafted With
+            {c.headline_a}
             <br />
-            <span className="text-shimmer italic">Precision & Elegance</span>
+            <span className="text-shimmer italic">{c.headline_b}</span>
           </motion.h1>
 
           <motion.p
@@ -50,7 +70,7 @@ export function Hero({ ready }: { ready: boolean }) {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mt-8 text-base md:text-lg text-white/75 max-w-2xl mx-auto font-light leading-relaxed"
           >
-            From intimate celebrations to grand experiences, we turn moments into unforgettable memories.
+            {c.subheadline}
           </motion.p>
 
           <motion.div
@@ -63,13 +83,13 @@ export function Hero({ ready }: { ready: boolean }) {
               href="#portfolio"
               className="px-8 py-4 border border-white/70 text-white text-xs uppercase tracking-luxe hover:bg-gold hover:border-gold hover:text-background transition-all"
             >
-              Explore Our Experiences
+              {c.cta_secondary}
             </a>
             <a
               href="#contact"
               className="px-8 py-4 bg-gold text-background text-xs uppercase tracking-luxe hover:bg-gold/85 transition-all"
             >
-              Book a Consultation
+              {c.cta_primary}
             </a>
           </motion.div>
         </div>
@@ -82,17 +102,12 @@ export function Hero({ ready }: { ready: boolean }) {
           transition={{ delay: 1.0, duration: 0.6 }}
           className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-px bg-gold/20 border-y border-gold/20"
         >
-          {stats.map((s, i) => (
+          {c.stats.map((s, i) => (
             <motion.div
-              key={s.n}
+              key={s.n + i}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={ready ? { opacity: 1, scale: 1 } : {}}
-              transition={{
-                delay: 1.0 + i * 0.15,
-                type: "spring",
-                stiffness: 200,
-                damping: 14,
-              }}
+              transition={{ delay: 1.0 + i * 0.15, type: "spring", stiffness: 200, damping: 14 }}
               className="bg-background/60 backdrop-blur-md py-6 text-center"
             >
               <div className="font-serif text-3xl md:text-4xl text-gold">{s.n}</div>
