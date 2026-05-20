@@ -1,28 +1,9 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
-import { Plus } from "lucide-react";
-import { useSiteContent } from "@/hooks/use-site-content";
-
-type Service = { title: string; body: string };
-type ServicesContent = { eyebrow: string; heading: string; services: Service[] };
-
-const defaults: ServicesContent = {
-  eyebrow: "What We Do",
-  heading: "A Complete Suite of Luxury Services",
-  services: [
-    { title: "Wedding Planning & Coordination", body: "We don't just plan weddings. We manage family dynamics, weather contingencies, and the one uncle who always drinks too much. Gracefully." },
-    { title: "Corporate Events & Launches", body: "Brand storytelling through physical environment. We transform venues into living manifestations of your vision." },
-    { title: "Luxury Décor & Styling", body: "Sourced florals, custom installations, bespoke linens, ambient lighting design. Every tablescape tells a story." },
-    { title: "Event Branding & Design", body: "Cohesive identity across invitations, signage, menus, programs. Your event becomes its own brand world." },
-    { title: "Entertainment & Guest Experience", body: "Curated talent, hosted moments, interactive installations. We design the emotional arc of the evening." },
-    { title: "Event Media & Social Coverage", body: "Cinematographers, editorial photographers, real-time social coverage. The event lives twice." },
-  ],
-};
+import { motion } from "framer-motion";
+import { Link } from "@tanstack/react-router";
+import { ArrowUpRight } from "lucide-react";
+import { services } from "@/lib/services-data";
 
 export function Services() {
-  const c = useSiteContent<ServicesContent>("services", defaults);
-  const [openIdx, setOpenIdx] = useState<number | null>(null);
-
   return (
     <section id="services" className="py-32 px-6 lg:px-12 bg-background relative">
       <div className="max-w-7xl mx-auto">
@@ -33,50 +14,50 @@ export function Services() {
           transition={{ duration: 0.8 }}
           className="text-center mb-20"
         >
-          <span className="text-[10px] uppercase tracking-wider-luxe text-gold">{c.eyebrow}</span>
+          <span className="text-[10px] uppercase tracking-wider-luxe text-gold">What We Do</span>
           <h2 className="mt-4 font-serif text-4xl md:text-5xl text-white text-balance">
-            {c.heading}
+            A Complete Suite of Luxury Services
           </h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {c.services.map((s, i) => {
-            const isOpen = openIdx === i;
-            return (
-              <motion.button
-                key={s.title + i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.6, delay: i * 0.08 }}
-                onClick={() => setOpenIdx(isOpen ? null : i)}
-                className={`group relative text-left p-8 glass border transition-all duration-500 ${
-                  isOpen ? "border-gold/60 shadow-[var(--shadow-gold-strong)]" : "border-gold/15 hover:border-gold/40 hover:-translate-y-1 hover:shadow-[var(--shadow-gold)]"
-                }`}
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="w-8 h-8 border border-gold/60 rotate-45 flex-shrink-0 flex items-center justify-center">
-                    <span className="-rotate-45 text-gold text-xs">0{i + 1}</span>
-                  </div>
-                  <Plus size={18} className={`text-gold transition-transform duration-500 ${isOpen ? "rotate-45" : ""}`} />
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {services.map((s, i) => (
+            <motion.article
+              key={s.slug}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, delay: i * 0.07 }}
+              className="group flex flex-col border border-gold/15 hover:border-gold/40 hover:shadow-[var(--shadow-gold)] transition-all duration-500"
+            >
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <img
+                  src={s.image}
+                  alt={s.title}
+                  loading="lazy"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/10 to-transparent" />
+                <div className="absolute top-4 left-4 text-[10px] uppercase tracking-wider-luxe text-gold">
+                  0{i + 1}
                 </div>
-                <h3 className="mt-6 font-serif text-xl text-white leading-snug">{s.title}</h3>
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.p
-                      initial={{ height: 0, opacity: 0, marginTop: 0 }}
-                      animate={{ height: "auto", opacity: 1, marginTop: 16 }}
-                      exit={{ height: 0, opacity: 0, marginTop: 0 }}
-                      transition={{ duration: 0.5, ease: "easeInOut" }}
-                      className="text-sm text-muted-foreground leading-relaxed overflow-hidden"
-                    >
-                      {s.body}
-                    </motion.p>
-                  )}
-                </AnimatePresence>
-              </motion.button>
-            );
-          })}
+              </div>
+              <div className="p-7 flex-1 flex flex-col">
+                <h3 className="font-serif text-xl text-white leading-snug">{s.title}</h3>
+                <p className="mt-3 text-sm text-muted-foreground leading-relaxed flex-1">
+                  {s.summary}
+                </p>
+                <Link
+                  to="/services/$slug"
+                  params={{ slug: s.slug }}
+                  className="mt-6 inline-flex items-center gap-2 self-start text-[11px] uppercase tracking-luxe text-gold border-b border-gold/40 pb-1 hover:border-gold transition-colors"
+                >
+                  Learn More
+                  <ArrowUpRight size={14} />
+                </Link>
+              </div>
+            </motion.article>
+          ))}
         </div>
       </div>
     </section>
