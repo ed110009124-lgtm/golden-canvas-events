@@ -3,6 +3,11 @@ import { motion } from "framer-motion";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/sections/Footer";
 import { ChevronLeft } from "lucide-react";
+import { cases as defaultCases, type CaseStudy } from "@/lib/portfolio-data";
+import { useSiteContent } from "@/hooks/use-site-content";
+
+type Case = CaseStudy;
+const cases = defaultCases;
 
 type Case = {
   slug: string;
