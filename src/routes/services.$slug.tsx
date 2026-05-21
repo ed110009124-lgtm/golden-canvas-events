@@ -43,7 +43,9 @@ export const Route = createFileRoute("/services/$slug")({
 });
 
 function ServicePage() {
-  const s = Route.useLoaderData() as ServiceItem;
+  const loaded = Route.useLoaderData() as ServiceItem;
+  const services = useSiteContent<ServiceItem[]>("services", defaultServices);
+  const s = services.find((x) => x.slug === loaded.slug) ?? loaded;
   const others = services.filter((x) => x.slug !== s.slug).slice(0, 3);
 
   return (
