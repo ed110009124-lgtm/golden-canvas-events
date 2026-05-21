@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
-import { services } from "@/lib/services-data";
+import { services as defaultServices, type ServiceItem } from "@/lib/services-data";
+import { useSiteContent } from "@/hooks/use-site-content";
 
 export function Services() {
+  const services = useSiteContent<ServiceItem[]>("services", defaultServices);
   return (
     <section id="services" className="py-32 px-6 lg:px-12 bg-background relative">
       <div className="max-w-7xl mx-auto">
