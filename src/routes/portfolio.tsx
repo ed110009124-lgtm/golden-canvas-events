@@ -22,6 +22,7 @@ export const Route = createFileRoute("/portfolio")({
 });
 
 function PortfolioPage() {
+  const cases = useSiteContent<CaseStudy[]>("portfolio", defaultCases);
   return (
     <div className="min-h-screen bg-background">
       <Nav />
