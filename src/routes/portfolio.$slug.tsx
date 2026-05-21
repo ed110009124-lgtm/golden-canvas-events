@@ -45,7 +45,9 @@ export const Route = createFileRoute("/portfolio/$slug")({
 });
 
 function CasePage() {
-  const c = Route.useLoaderData() as Case;
+  const loaded = Route.useLoaderData() as Case;
+  const all = useSiteContent<Case[]>("portfolio", defaultCases);
+  const c = all.find((x) => x.slug === loaded.slug) ?? loaded;
 
   return (
     <div className="min-h-screen bg-background">
