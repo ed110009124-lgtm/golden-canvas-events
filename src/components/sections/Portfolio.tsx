@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { cases } from "@/lib/portfolio-data";
+import { cases as defaultCases, type CaseStudy } from "@/lib/portfolio-data";
+import { useSiteContent } from "@/hooks/use-site-content";
 
 export function Portfolio() {
+  const cases = useSiteContent<CaseStudy[]>("portfolio", defaultCases);
   const featured = cases.slice(0, 6);
 
   return (
