@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/sections/Footer";
-import { cases } from "@/lib/portfolio-data";
+import { cases as defaultCases, type CaseStudy } from "@/lib/portfolio-data";
+import { useSiteContent } from "@/hooks/use-site-content";
 
 export const Route = createFileRoute("/portfolio")({
   head: () => ({
