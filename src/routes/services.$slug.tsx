@@ -3,7 +3,8 @@ import { motion } from "framer-motion";
 import { ChevronLeft } from "lucide-react";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/sections/Footer";
-import { services, getService, type ServiceItem } from "@/lib/services-data";
+import { services as defaultServices, getService, type ServiceItem } from "@/lib/services-data";
+import { useSiteContent } from "@/hooks/use-site-content";
 
 export const Route = createFileRoute("/services/$slug")({
   loader: ({ params }): ServiceItem => {
