@@ -181,9 +181,35 @@ const SECTIONS: Section[] = [
     ],
   },
   {
+    key: "team_preview",
+    label: "Team (Homepage)",
+    description: "The 3 'Happy Memories' cards shown on the homepage, above the More button.",
+    defaults: [
+      {
+        title: "Moments In The Making",
+        description: "Behind every flawless evening is a team in motion.",
+        img: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1400&q=80",
+      },
+    ],
+    rootArrayKey: "items",
+    fields: [
+      {
+        type: "list-object",
+        key: "items",
+        label: "Homepage team cards (first 3 shown)",
+        itemLabel: "Card",
+        fields: [
+          { type: "text", key: "title", label: "Title" },
+          { type: "textarea", key: "description", label: "Description" },
+          { type: "image", key: "img", label: "Photo (URL)" },
+        ],
+      },
+    ],
+  },
+  {
     key: "team_groups",
-    label: "Team Page",
-    description: "Group photos and descriptions shown on /team.",
+    label: "Team Page (/team)",
+    description: "All group photos and descriptions on the full Team page.",
     defaults: [
       {
         title: "The Production Team",
