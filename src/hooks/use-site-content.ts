@@ -10,19 +10,31 @@ async function fetchKey(key: string) {
 }
 
 export function useSiteContent<T>(key: string, fallback: T): T {
-  const [value, setValue] = useState<T>(() => (cache.has(key) ? (cache.get(key) as T) : fallback));
+  const pick = (v: unknown): T => {
+    if (v === null || v === undefined) return fallback;
+    if (Array.isArray(fallback) && !Array.isArray(v)) {
+      const items = (v as { items?: unknown }).items;
+      if (Array.isArray(items)) return items as T;
+      return fallback;
+    }
+    return v as T;
+  };
+
+  const [value, setValue] = useState<T>(() =>
+    cache.has(key) ? pick(cache.get(key)) : fallback,
+  );
 
   useEffect(() => {
     let alive = true;
     if (!listeners.has(key)) listeners.set(key, new Set());
     const set = (v: unknown) => {
       if (!alive) return;
-      setValue((v as T) ?? fallback);
+      setValue(pick(v));
     };
     listeners.get(key)!.add(set);
 
     if (cache.has(key)) {
-      setValue((cache.get(key) as T) ?? fallback);
+      setValue(pick(cache.get(key)));
     } else {
       fetchKey(key).then((v) => {
         cache.set(key, v);
@@ -33,7 +45,8 @@ export function useSiteContent<T>(key: string, fallback: T): T {
       alive = false;
       listeners.get(key)?.delete(set);
     };
-  }, [key, fallback]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
 
   return value;
 }

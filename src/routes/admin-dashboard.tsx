@@ -14,8 +14,8 @@ export const Route = createFileRoute("/admin-dashboard")({
   component: Dashboard,
 });
 
-const ADMIN_USERNAME = "Mileynevents";
-const ADMIN_PASSWORD = "mileyn1234";
+const ADMIN_USERNAME = "mileynevents";
+const ADMIN_PASSWORD = "1234";
 
 // ────────────────────────────────────────────────────────────────────────────
 // SCHEMAS — describe each section as fields the admin sees in plain English.
