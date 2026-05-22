@@ -280,6 +280,7 @@ function Dashboard() {
   const navigate = useNavigate();
   const [authed, setAuthed] = useState<boolean | null>(null);
   const [sectionKey, setSectionKey] = useState<string>(SECTIONS[0].key);
+  const [navOpen, setNavOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -307,42 +308,81 @@ function Dashboard() {
 
   const section = SECTIONS.find((s) => s.key === sectionKey)!;
 
-  return (
-    <div className="min-h-screen bg-background flex">
-      <aside className="w-64 border-r border-gold/15 p-8 flex flex-col shrink-0">
-        <div className="font-serif font-bold text-white uppercase tracking-luxe text-xl">Mileyn</div>
-        <div className="text-[10px] tracking-wider-luxe text-gold mt-1">ADMIN</div>
+  const SidebarContent = (
+    <>
+      <div className="font-serif font-bold text-white uppercase tracking-luxe text-xl">Mileyn</div>
+      <div className="text-[10px] tracking-wider-luxe text-gold mt-1">ADMIN</div>
 
-        <div className="text-[10px] uppercase tracking-wider-luxe text-white/40 mt-10 mb-2">
-          Site Content
-        </div>
-        <nav className="flex flex-col gap-1 text-sm flex-1">
-          {SECTIONS.map((s) => (
-            <button
-              key={s.key}
-              onClick={() => setSectionKey(s.key)}
-              className={`text-left py-2 px-3 rounded-sm transition-colors ${
-                sectionKey === s.key
-                  ? "bg-gold/10 text-gold"
-                  : "text-white/70 hover:text-gold hover:bg-white/5"
-              }`}
-            >
-              {s.label}
-            </button>
-          ))}
-        </nav>
-
-        <div className="flex flex-col gap-3 text-xs uppercase tracking-luxe pt-6 border-t border-gold/15">
-          <Link to="/" target="_blank" className="text-white/70 hover:text-gold">
-            View Site ↗
-          </Link>
-          <button onClick={logout} className="text-white/60 hover:text-gold text-left">
-            Logout
+      <div className="text-[10px] uppercase tracking-wider-luxe text-white/40 mt-10 mb-2">
+        Site Content
+      </div>
+      <nav className="flex flex-col gap-1 text-sm flex-1 overflow-y-auto">
+        {SECTIONS.map((s) => (
+          <button
+            key={s.key}
+            onClick={() => {
+              setSectionKey(s.key);
+              setNavOpen(false);
+            }}
+            className={`text-left py-2 px-3 rounded-sm transition-colors ${
+              sectionKey === s.key
+                ? "bg-gold/10 text-gold"
+                : "text-white/70 hover:text-gold hover:bg-white/5"
+            }`}
+          >
+            {s.label}
           </button>
+        ))}
+      </nav>
+
+      <div className="flex flex-col gap-3 text-xs uppercase tracking-luxe pt-6 border-t border-gold/15">
+        <Link to="/" target="_blank" className="text-white/70 hover:text-gold">
+          View Site ↗
+        </Link>
+        <button onClick={logout} className="text-white/60 hover:text-gold text-left">
+          Logout
+        </button>
+      </div>
+    </>
+  );
+
+  return (
+    <div className="min-h-screen bg-background lg:flex">
+      {/* Mobile top bar */}
+      <header className="lg:hidden sticky top-0 z-30 bg-background/95 backdrop-blur border-b border-gold/15 flex items-center justify-between px-4 h-14">
+        <div className="flex items-center gap-2">
+          <span className="font-serif font-bold text-white uppercase tracking-luxe">Mileyn</span>
+          <span className="text-[10px] tracking-wider-luxe text-gold">ADMIN</span>
         </div>
+        <button
+          onClick={() => setNavOpen(true)}
+          className="text-gold text-xs uppercase tracking-luxe border border-gold/40 px-3 py-1.5"
+        >
+          Menu
+        </button>
+      </header>
+
+      {/* Desktop sidebar */}
+      <aside className="hidden lg:flex w-64 border-r border-gold/15 p-8 flex-col shrink-0 sticky top-0 h-screen">
+        {SidebarContent}
       </aside>
 
-      <main className="flex-1 p-10 overflow-y-auto">
+      {/* Mobile drawer */}
+      {navOpen && (
+        <div
+          className="lg:hidden fixed inset-0 z-40 bg-black/70"
+          onClick={() => setNavOpen(false)}
+        >
+          <aside
+            onClick={(e) => e.stopPropagation()}
+            className="absolute left-0 top-0 bottom-0 w-72 max-w-[85vw] bg-background border-r border-gold/15 p-6 flex flex-col"
+          >
+            {SidebarContent}
+          </aside>
+        </div>
+      )}
+
+      <main className="flex-1 p-5 sm:p-8 lg:p-10 overflow-y-auto min-w-0">
         <SectionForm key={section.key} section={section} />
       </main>
     </div>
