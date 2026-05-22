@@ -147,13 +147,13 @@ export function Contact() {
         </div>
       </div>
 
-      {/* Floating WhatsApp button */}
+      {/* Floating WhatsApp button (offset so it doesn't cover the admin dot) */}
       <a
         href={waLink(info.whatsapp)}
         target="_blank"
         rel="noreferrer"
         aria-label="WhatsApp"
-        className="fixed bottom-5 left-5 z-40 w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-[0_10px_30px_-8px_rgba(37,211,102,0.55)] hover:scale-110 transition-transform"
+        className="fixed bottom-5 left-16 z-40 w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-[0_10px_30px_-8px_rgba(37,211,102,0.55)] hover:scale-110 transition-transform"
       >
         <MessageCircle size={26} />
       </a>
