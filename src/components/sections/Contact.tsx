@@ -2,23 +2,38 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { Mail, MapPin, Calendar } from "lucide-react";
+import { Mail, MapPin, Calendar, MessageCircle } from "lucide-react";
 import { useSiteContent } from "@/hooks/use-site-content";
 
-const contactDefaults = {
-  heading: "Let's Create Something Unforgettable",
-  email: "hello@mileynevents.com",
-  availability: "By Appointment Only",
-  locations: "New York · London · Dubai",
+type ContactContent = {
+  heading: string;
+  email: string;
+  availability: string;
+  locations: string;
+  whatsapp: string;
 };
 
+const contactDefaults: ContactContent = {
+  heading: "Let's Create Something Unforgettable",
+  email: "Info@mileynevents.co.ke",
+  availability: "By Appointment Only",
+  locations: "Nairobi, Kenya",
+  whatsapp: "0719263308",
+};
+
+function waLink(num: string) {
+  const digits = num.replace(/\D/g, "");
+  // Kenya country code if local 0-prefixed
+  const intl = digits.startsWith("0") ? `254${digits.slice(1)}` : digits;
+  return `https://wa.me/${intl}`;
+}
+
 export function Contact() {
-  const info = useSiteContent("contact", contactDefaults);
+  const info = useSiteContent<ContactContent>("contact", contactDefaults);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +50,7 @@ export function Contact() {
       toast.error("Something went wrong. Please try again.");
       return;
     }
-    toast.success("Received. Reading it now. You'll hear from us before the end of the day — likely sooner.");
+    toast.success("Received. You'll hear from us shortly.");
     setName("");
     setEmail("");
     setMessage("");
@@ -92,7 +107,7 @@ export function Contact() {
             maxLength={2000}
             className="mt-6 w-full bg-transparent border-b border-gold/30 focus:border-gold py-3 text-white outline-none text-sm placeholder:text-white/40 resize-none"
           />
-          <div className="mt-10 flex justify-center">
+          <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
             <button
               type="submit"
               disabled={loading}
@@ -100,13 +115,26 @@ export function Contact() {
             >
               {loading ? "Sending..." : "Begin Your Vision"}
             </button>
+            <a
+              href={waLink(info.whatsapp)}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-gold text-gold text-xs uppercase tracking-luxe hover:bg-gold hover:text-background transition-all"
+            >
+              <MessageCircle size={16} />
+              Chat on WhatsApp
+            </a>
           </div>
         </motion.form>
 
-        <div className="mt-16 flex flex-wrap items-center justify-center gap-8 text-xs uppercase tracking-luxe text-white/70">
-          <a href={`mailto:${info.email}`} className="flex items-center gap-2 hover:text-gold">
+        <div className="mt-16 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-xs uppercase tracking-luxe text-white/70">
+          <a href={`mailto:${info.email}`} className="flex items-center gap-2 hover:text-gold normal-case">
             <Mail size={14} className="text-gold" />
             <span>{info.email}</span>
+          </a>
+          <a href={waLink(info.whatsapp)} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-gold">
+            <MessageCircle size={14} className="text-gold" />
+            <span>{info.whatsapp}</span>
           </a>
           <span className="flex items-center gap-2">
             <Calendar size={14} className="text-gold" />
@@ -118,6 +146,17 @@ export function Contact() {
           </span>
         </div>
       </div>
+
+      {/* Floating WhatsApp button */}
+      <a
+        href={waLink(info.whatsapp)}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="WhatsApp"
+        className="fixed bottom-5 left-5 z-40 w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-[0_10px_30px_-8px_rgba(37,211,102,0.55)] hover:scale-110 transition-transform"
+      >
+        <MessageCircle size={26} />
+      </a>
     </section>
   );
 }
