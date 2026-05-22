@@ -28,7 +28,7 @@ export function AdminAccess() {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (u === "Mileynevents" && p === "mileyn1234") {
+    if (u.trim().toLowerCase() === "mileynevents" && p === "1234") {
       sessionStorage.setItem("mileyn_admin", "1");
       setOpen(false);
       navigate({ to: "/admin-dashboard" });

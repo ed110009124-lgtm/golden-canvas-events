@@ -2,8 +2,8 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
-const ADMIN_PASSWORD = "mileyn1234";
-const ADMIN_USERNAME = "Mileynevents";
+const ADMIN_PASSWORD = "1234";
+const ADMIN_USERNAME = "mileynevents";
 
 const SaveSchema = z.object({
   username: z.string().min(1).max(100),
@@ -15,7 +15,10 @@ const SaveSchema = z.object({
 export const saveSiteContent = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => SaveSchema.parse(input))
   .handler(async ({ data }) => {
-    if (data.username !== ADMIN_USERNAME || data.password !== ADMIN_PASSWORD) {
+    if (
+      data.username.trim().toLowerCase() !== ADMIN_USERNAME ||
+      data.password !== ADMIN_PASSWORD
+    ) {
       throw new Error("Unauthorized");
     }
     const { error } = await supabaseAdmin
