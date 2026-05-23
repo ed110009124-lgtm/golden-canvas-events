@@ -102,7 +102,7 @@ export function Contact() {
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Describe your dream event..."
+            placeholder="Tell us the date, the vibe, and your guest count. We'll get back to you within 2 hours."
             rows={5}
             maxLength={2000}
             className="mt-6 w-full bg-transparent border-b border-gold/30 focus:border-gold py-3 text-white outline-none text-sm placeholder:text-white/40 resize-none"

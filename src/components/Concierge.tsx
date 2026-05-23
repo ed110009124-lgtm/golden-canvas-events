@@ -32,7 +32,7 @@ export function Concierge() {
       >
         <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse-gold" />
         <span className="text-xs uppercase tracking-luxe text-white/90">
-          Our Curators Are Online
+          We Are Available Now
         </span>
       </button>
     </div>
