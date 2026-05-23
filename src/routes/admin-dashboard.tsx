@@ -806,3 +806,219 @@ function IconBtn({
     </button>
   );
 }
+
+// ────────────────────────────────────────────────────────────────────────────
+// MEDIA LIBRARY
+// ────────────────────────────────────────────────────────────────────────────
+
+type MediaItem = { url: string; path?: string; label?: string };
+
+function MediaLibrary() {
+  const upload = useServerFn(uploadMedia);
+  const remove = useServerFn(deleteMedia);
+  const [items, setItems] = useState<MediaItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
+  const [urlInput, setUrlInput] = useState("");
+  const [labelInput, setLabelInput] = useState("");
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setLoading(true);
+    supabase
+      .from("site_content")
+      .select("value")
+      .eq("key", "media_library")
+      .maybeSingle()
+      .then(({ data }) => {
+        const v = data?.value as { items?: MediaItem[] } | MediaItem[] | null;
+        const list = Array.isArray(v) ? v : v?.items ?? [];
+        setItems(list);
+        setLoading(false);
+      });
+  }, []);
+
+  const persist = async (next: MediaItem[]) => {
+    setItems(next);
+    const save = saveSiteContent;
+    try {
+      await save({
+        data: {
+          username: ADMIN_USERNAME,
+          password: ADMIN_PASSWORD,
+          key: "media_library",
+          value: { items: next },
+        },
+      });
+      primeSiteContent("media_library", { items: next });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Save failed");
+    }
+  };
+
+  const onFile = async (file: File) => {
+    if (file.size > 8_000_000) {
+      toast.error("Please choose an image under 8MB.");
+      return;
+    }
+    setBusy(true);
+    try {
+      const buf = await file.arrayBuffer();
+      let binary = "";
+      const bytes = new Uint8Array(buf);
+      for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+      const dataBase64 = btoa(binary);
+      const res = await upload({
+        data: {
+          username: ADMIN_USERNAME,
+          password: ADMIN_PASSWORD,
+          filename: file.name,
+          contentType: file.type || "application/octet-stream",
+          dataBase64,
+        },
+      });
+      const next = [{ url: res.url, path: res.path, label: file.name }, ...items];
+      await persist(next);
+      toast.success("Image uploaded.");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Upload failed");
+    } finally {
+      setBusy(false);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  };
+
+  const addUrl = async () => {
+    const url = urlInput.trim();
+    if (!/^https?:\/\//i.test(url)) {
+      toast.error("Enter a valid image URL starting with https://");
+      return;
+    }
+    const next = [{ url, label: labelInput.trim() || undefined }, ...items];
+    await persist(next);
+    setUrlInput("");
+    setLabelInput("");
+    toast.success("Image added.");
+  };
+
+  const del = async (i: number) => {
+    if (!confirm("Delete this image? This cannot be undone.")) return;
+    const target = items[i];
+    const next = items.filter((_, k) => k !== i);
+    await persist(next);
+    if (target.path) {
+      try {
+        await remove({
+          data: { username: ADMIN_USERNAME, password: ADMIN_PASSWORD, path: target.path },
+        });
+      } catch {
+        // listing already updated; storage cleanup best-effort
+      }
+    }
+  };
+
+  const copyUrl = async (url: string) => {
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("URL copied — paste it into any image field.");
+    } catch {
+      toast.error("Copy failed");
+    }
+  };
+
+  return (
+    <div className="max-w-5xl">
+      <div className="mb-1 text-[10px] uppercase tracking-wider-luxe text-gold">Editing</div>
+      <h1 className="font-serif text-4xl text-white">Media Library</h1>
+      <p className="text-muted-foreground text-sm mt-2 mb-10">
+        All images you can use across the site. Upload from your device or paste a URL, then copy the link into any image field (Hero, Services, Portfolio, Team, etc.).
+      </p>
+
+      <div className="grid md:grid-cols-2 gap-6 mb-10">
+        <div className="border border-gold/20 p-5 bg-black/20">
+          <div className="text-[11px] uppercase tracking-wider-luxe text-gold mb-3">Upload from device</div>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            disabled={busy}
+            onChange={(e) => e.target.files?.[0] && onFile(e.target.files[0])}
+            className="block w-full text-sm text-white/80 file:mr-3 file:py-2 file:px-4 file:border-0 file:bg-gold file:text-background file:uppercase file:text-[11px] file:tracking-luxe file:cursor-pointer"
+          />
+          <p className="text-[11px] text-muted-foreground mt-3 flex items-center gap-2">
+            <Upload size={12} /> Max 8MB — JPG, PNG or WebP.
+          </p>
+        </div>
+
+        <div className="border border-gold/20 p-5 bg-black/20">
+          <div className="text-[11px] uppercase tracking-wider-luxe text-gold mb-3">Add by URL</div>
+          <input
+            type="url"
+            placeholder="https://..."
+            value={urlInput}
+            onChange={(e) => setUrlInput(e.target.value)}
+            className="w-full bg-black/30 border border-gold/20 focus:border-gold/60 text-white text-sm px-3 py-2.5 outline-none rounded-sm mb-2"
+          />
+          <input
+            type="text"
+            placeholder="Optional label (e.g. Hero background)"
+            value={labelInput}
+            onChange={(e) => setLabelInput(e.target.value)}
+            className="w-full bg-black/30 border border-gold/20 focus:border-gold/60 text-white text-sm px-3 py-2.5 outline-none rounded-sm mb-3"
+          />
+          <button
+            onClick={addUrl}
+            className="px-4 py-2 bg-gold text-background text-[11px] uppercase tracking-luxe hover:bg-gold/85"
+          >
+            Add Image
+          </button>
+        </div>
+      </div>
+
+      {loading ? (
+        <p className="text-muted-foreground">Loading…</p>
+      ) : items.length === 0 ? (
+        <p className="text-muted-foreground italic">
+          No images yet. Upload or paste a URL to get started.
+        </p>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {items.map((m, i) => (
+            <div key={m.url + i} className="group border border-gold/15 bg-black/20">
+              <div className="relative aspect-square overflow-hidden">
+                <img
+                  src={m.url}
+                  alt={m.label || "media"}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).style.opacity = "0.2";
+                  }}
+                />
+              </div>
+              <div className="p-3">
+                {m.label && (
+                  <div className="text-xs text-white truncate mb-2">{m.label}</div>
+                )}
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => copyUrl(m.url)}
+                    className="flex-1 inline-flex items-center justify-center gap-1 text-[10px] uppercase tracking-luxe text-gold border border-gold/30 hover:bg-gold/10 py-1.5"
+                  >
+                    <Copy size={11} /> Copy URL
+                  </button>
+                  <button
+                    onClick={() => del(i)}
+                    className="inline-flex items-center justify-center text-red-400 border border-red-400/30 hover:bg-red-500/10 px-2 py-1.5"
+                    aria-label="Delete"
+                  >
+                    <Trash2 size={12} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
