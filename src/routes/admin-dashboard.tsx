@@ -360,7 +360,8 @@ function Dashboard() {
     navigate({ to: "/" });
   };
 
-  const section = SECTIONS.find((s) => s.key === sectionKey)!;
+  const section = SECTIONS.find((s) => s.key === sectionKey);
+  const isMedia = sectionKey === "__media";
 
   const SidebarContent = (
     <>
@@ -387,6 +388,21 @@ function Dashboard() {
             {s.label}
           </button>
         ))}
+
+        <div className="text-[10px] uppercase tracking-wider-luxe text-white/40 mt-6 mb-2">
+          Assets
+        </div>
+        <button
+          onClick={() => {
+            setSectionKey("__media");
+            setNavOpen(false);
+          }}
+          className={`text-left py-2 px-3 rounded-sm transition-colors flex items-center gap-2 ${
+            isMedia ? "bg-gold/10 text-gold" : "text-white/70 hover:text-gold hover:bg-white/5"
+          }`}
+        >
+          <ImageIcon size={14} /> Media Library
+        </button>
       </nav>
 
       <div className="flex flex-col gap-3 text-xs uppercase tracking-luxe pt-6 border-t border-gold/15">
@@ -437,7 +453,11 @@ function Dashboard() {
       )}
 
       <main className="flex-1 p-5 sm:p-8 lg:p-10 overflow-y-auto min-w-0">
-        <SectionForm key={section.key} section={section} />
+        {isMedia ? (
+          <MediaLibrary />
+        ) : section ? (
+          <SectionForm key={section.key} section={section} />
+        ) : null}
       </main>
     </div>
   );
