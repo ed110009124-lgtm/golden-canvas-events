@@ -115,15 +115,14 @@ export function Contact() {
             >
               {loading ? "Sending..." : "Begin Your Vision"}
             </button>
-            <a
-              href={waLink(info.whatsapp)}
-              target="_blank"
-              rel="noreferrer"
+            <button
+              type="button"
+              onClick={() => window.open(waLink(info.whatsapp), "_blank", "noopener,noreferrer")}
               className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-gold text-gold text-xs uppercase tracking-luxe hover:bg-gold hover:text-background transition-all"
             >
               <MessageCircle size={16} />
               Chat on WhatsApp
-            </a>
+            </button>
           </div>
         </motion.form>
 
@@ -132,10 +131,14 @@ export function Contact() {
             <Mail size={14} className="text-gold" />
             <span>{info.email}</span>
           </a>
-          <a href={waLink(info.whatsapp)} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-gold">
+          <button
+            type="button"
+            onClick={() => window.open(waLink(info.whatsapp), "_blank", "noopener,noreferrer")}
+            className="flex items-center gap-2 hover:text-gold"
+          >
             <MessageCircle size={14} className="text-gold" />
             <span>{info.whatsapp}</span>
-          </a>
+          </button>
           <span className="flex items-center gap-2">
             <Calendar size={14} className="text-gold" />
             <span>{info.availability}</span>
@@ -148,15 +151,13 @@ export function Contact() {
       </div>
 
       {/* Floating WhatsApp button (offset so it doesn't cover the admin dot) */}
-      <a
-        href={waLink(info.whatsapp)}
-        target="_blank"
-        rel="noreferrer"
+      <button
+        onClick={() => window.open(waLink(info.whatsapp), "_blank", "noopener,noreferrer")}
         aria-label="WhatsApp"
         className="fixed bottom-5 left-16 z-40 w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-[0_10px_30px_-8px_rgba(37,211,102,0.55)] hover:scale-110 transition-transform"
       >
         <MessageCircle size={26} />
-      </a>
+      </button>
     </section>
   );
 }
