@@ -272,6 +272,7 @@ const SECTIONS: Section[] = [
       { type: "text", key: "email", label: "Email address" },
       { type: "text", key: "copyright", label: "Copyright line" },
     ],
+  },
   {
     key: "how_it_works",
     label: "How It Works",
