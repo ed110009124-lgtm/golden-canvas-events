@@ -1,10 +1,11 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Plus, Trash2, ChevronUp, ChevronDown } from "lucide-react";
+import { Plus, Trash2, ChevronUp, ChevronDown, Upload, Copy, Image as ImageIcon } from "lucide-react";
 import { saveSiteContent } from "@/lib/content.functions";
+import { uploadMedia, deleteMedia } from "@/lib/media.functions";
 import { primeSiteContent } from "@/hooks/use-site-content";
 import { services as defaultServices } from "@/lib/services-data";
 import { cases as defaultCases } from "@/lib/portfolio-data";
