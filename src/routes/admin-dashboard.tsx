@@ -272,6 +272,58 @@ const SECTIONS: Section[] = [
       { type: "text", key: "email", label: "Email address" },
       { type: "text", key: "copyright", label: "Copyright line" },
     ],
+  {
+    key: "how_it_works",
+    label: "How It Works",
+    description: "The 5-step process section on the homepage.",
+    defaults: {
+      eyebrow: "How It Works",
+      heading: "From First Hello To Last Toast",
+      subheading: "A calm, considered process — designed so you can enjoy the build-up as much as the event itself.",
+      steps: [
+        { n: "01", title: "Tell Us Your Vision", description: "Send us the date, the vibe and your guest count." },
+      ],
+    },
+    fields: [
+      { type: "text", key: "eyebrow", label: "Small label above heading" },
+      { type: "text", key: "heading", label: "Heading" },
+      { type: "textarea", key: "subheading", label: "Subheading" },
+      {
+        type: "list-object",
+        key: "steps",
+        label: "Steps",
+        itemLabel: "Step",
+        fields: [
+          { type: "text", key: "n", label: "Number (e.g. 01)" },
+          { type: "text", key: "title", label: "Title" },
+          { type: "textarea", key: "description", label: "Description" },
+        ],
+      },
+    ],
+  },
+  {
+    key: "faq",
+    label: "FAQ",
+    description: "Frequently asked questions shown on the homepage.",
+    defaults: {
+      eyebrow: "FAQ",
+      heading: "Questions, Answered",
+      items: [{ q: "How far in advance should we book?", a: "6–12 months for weddings; 4–8 weeks for smaller events." }],
+    },
+    fields: [
+      { type: "text", key: "eyebrow", label: "Small label above heading" },
+      { type: "text", key: "heading", label: "Heading" },
+      {
+        type: "list-object",
+        key: "items",
+        label: "Questions",
+        itemLabel: "Question",
+        fields: [
+          { type: "text", key: "q", label: "Question" },
+          { type: "textarea", key: "a", label: "Answer" },
+        ],
+      },
+    ],
   },
 ];
 
