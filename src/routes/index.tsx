@@ -10,6 +10,8 @@ import { Portfolio } from "@/components/sections/Portfolio";
 import { WhyChoose } from "@/components/sections/WhyChoose";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { TeamPreview } from "@/components/sections/TeamPreview";
+import { HowItWorks } from "@/components/sections/HowItWorks";
+import { FAQ } from "@/components/sections/FAQ";
 import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/sections/Footer";
 import { QuickInquiry } from "@/components/QuickInquiry";
@@ -47,8 +49,10 @@ function Index() {
       <Services />
       <Portfolio />
       <WhyChoose />
+      <HowItWorks />
       <TeamPreview />
       <Testimonials />
+      <FAQ />
       <Contact />
       <Footer />
       <QuickInquiry />
