@@ -37,14 +37,22 @@ export function Footer() {
 
       <div className="mt-8 flex justify-center gap-4 flex-wrap">
         {c.instagram && (
-          <a href={c.instagram} target="_blank" rel="noreferrer" aria-label="Instagram" className="w-10 h-10 rounded-full border border-gold/40 text-gold hover:bg-gold hover:text-background transition-colors flex items-center justify-center">
+          <button
+            onClick={() => window.open(c.instagram, "_blank", "noopener,noreferrer")}
+            aria-label="Instagram"
+            className="w-10 h-10 rounded-full border border-gold/40 text-gold hover:bg-gold hover:text-background transition-colors flex items-center justify-center"
+          >
             <Instagram size={16} />
-          </a>
+          </button>
         )}
         {c.whatsapp && (
-          <a href={waLink(c.whatsapp)} target="_blank" rel="noreferrer" aria-label="WhatsApp" className="w-10 h-10 rounded-full border border-gold/40 text-gold hover:bg-gold hover:text-background transition-colors flex items-center justify-center">
+          <button
+            onClick={() => window.open(waLink(c.whatsapp), "_blank", "noopener,noreferrer")}
+            aria-label="WhatsApp"
+            className="w-10 h-10 rounded-full border border-gold/40 text-gold hover:bg-gold hover:text-background transition-colors flex items-center justify-center"
+          >
             <MessageCircle size={16} />
-          </a>
+          </button>
         )}
         {c.email && (
           <a href={`mailto:${c.email}`} aria-label="Email" className="w-10 h-10 rounded-full border border-gold/40 text-gold hover:bg-gold hover:text-background transition-colors flex items-center justify-center">
@@ -52,9 +60,13 @@ export function Footer() {
           </a>
         )}
         {c.linkedin && (
-          <a href={c.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="w-10 h-10 rounded-full border border-gold/40 text-gold hover:bg-gold hover:text-background transition-colors flex items-center justify-center">
+          <button
+            onClick={() => window.open(c.linkedin, "_blank", "noopener,noreferrer")}
+            aria-label="LinkedIn"
+            className="w-10 h-10 rounded-full border border-gold/40 text-gold hover:bg-gold hover:text-background transition-colors flex items-center justify-center"
+          >
             <Linkedin size={16} />
-          </a>
+          </button>
         )}
       </div>
 

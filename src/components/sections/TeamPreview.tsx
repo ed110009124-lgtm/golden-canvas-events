@@ -29,7 +29,7 @@ export function TeamPreview() {
   const team = useSiteContent<TeamGroup[]>("team_preview", defaults);
 
   return (
-    <section id="team" className="py-32 px-6 lg:px-12 bg-background">
+    <section id="team" className="pt-24 pb-12 px-6 lg:px-12 bg-background">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

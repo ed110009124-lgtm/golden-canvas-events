@@ -37,7 +37,7 @@ export function Testimonials() {
   const c = useSiteContent<TestimonialsContent>("testimonials", defaults);
 
   return (
-    <section id="testimonials" className="py-32 px-6 lg:px-12">
+    <section id="testimonials" className="pt-8 pb-24 px-6 lg:px-12">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
