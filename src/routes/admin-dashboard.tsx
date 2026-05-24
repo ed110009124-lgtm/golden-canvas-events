@@ -725,7 +725,7 @@ function FieldRenderer({
           {list.map((item, i) => (
             <details
               key={i}
-              open={list.length < 4}
+              open
               className="border border-gold/15 rounded-sm bg-black/20"
             >
               <summary className="cursor-pointer px-4 py-3 flex items-center justify-between gap-3 list-none">
