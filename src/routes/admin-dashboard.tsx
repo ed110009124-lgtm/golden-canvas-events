@@ -628,27 +628,11 @@ function FieldRenderer({
   }
 
   if (field.type === "image") {
-    const v = (value as string) ?? "";
     return (
       <div>
         {labelEl}
-        <div className="flex gap-4 items-start">
-          {v && (
-            <div className="w-28 h-20 bg-black/40 border border-gold/15 overflow-hidden flex-shrink-0">
-              <img src={v} alt="preview" className="w-full h-full object-cover" />
-            </div>
-          )}
-          <input
-            type="url"
-            placeholder="https://..."
-            value={v}
-            onChange={(e) => onChange(e.target.value)}
-            className={inputCls}
-          />
-        </div>
-        <p className="text-[11px] text-muted-foreground mt-1.5">
-          Paste an image URL (from Unsplash, your file hosting, etc.).
-        </p>
+        <ImageField value={(value as string) ?? ""} onChange={(v) => onChange(v)} />
+        {hintEl}
       </div>
     );
   }
@@ -783,6 +767,89 @@ function FieldRenderer({
   }
 
   return null;
+}
+
+function ImageField({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const upload = useServerFn(uploadMedia);
+  const [busy, setBusy] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const onPick = async (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please choose an image file.");
+      return;
+    }
+    if (file.size > 8_000_000) {
+      toast.error("Image must be under 8MB.");
+      return;
+    }
+    setBusy(true);
+    try {
+      const buf = await file.arrayBuffer();
+      let binary = "";
+      const bytes = new Uint8Array(buf);
+      for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+      const allowed = ["image/jpeg", "image/png", "image/webp", "image/gif"] as const;
+      const ct = (allowed as readonly string[]).includes(file.type)
+        ? (file.type as typeof allowed[number])
+        : "image/jpeg";
+      const res = await upload({
+        data: {
+          username: ADMIN_USERNAME,
+          password: ADMIN_PASSWORD,
+          filename: file.name,
+          contentType: ct,
+          dataBase64: btoa(binary),
+        },
+      });
+      onChange(res.url);
+      toast.success("Image updated. Click Save to publish.");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Upload failed");
+    } finally {
+      setBusy(false);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  };
+
+  return (
+    <div className="flex gap-4 items-start">
+      <div className="w-32 h-24 bg-black/40 border border-gold/20 overflow-hidden flex-shrink-0 flex items-center justify-center">
+        {value ? (
+          <img src={value} alt="preview" className="w-full h-full object-cover" />
+        ) : (
+          <ImageIcon size={20} className="text-white/30" />
+        )}
+      </div>
+      <div className="flex-1 min-w-0 space-y-2">
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*"
+          disabled={busy}
+          onChange={(e) => e.target.files?.[0] && onPick(e.target.files[0])}
+          className="block w-full text-xs text-white/80 file:mr-3 file:py-2 file:px-3 file:border-0 file:bg-gold file:text-background file:uppercase file:text-[10px] file:tracking-luxe file:cursor-pointer disabled:opacity-50"
+        />
+        <input
+          type="url"
+          placeholder="…or paste image URL"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full bg-black/30 border border-gold/20 focus:border-gold/60 text-white text-xs px-3 py-2 outline-none rounded-sm"
+        />
+        {value && (
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="text-[10px] uppercase tracking-luxe text-red-400/80 hover:text-red-300"
+          >
+            Remove image
+          </button>
+        )}
+        {busy && <p className="text-[11px] text-gold">Uploading…</p>}
+      </div>
+    </div>
+  );
 }
 
 function IconBtn({
