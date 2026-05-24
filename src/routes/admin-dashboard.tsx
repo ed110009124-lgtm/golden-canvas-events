@@ -628,27 +628,11 @@ function FieldRenderer({
   }
 
   if (field.type === "image") {
-    const v = (value as string) ?? "";
     return (
       <div>
         {labelEl}
-        <div className="flex gap-4 items-start">
-          {v && (
-            <div className="w-28 h-20 bg-black/40 border border-gold/15 overflow-hidden flex-shrink-0">
-              <img src={v} alt="preview" className="w-full h-full object-cover" />
-            </div>
-          )}
-          <input
-            type="url"
-            placeholder="https://..."
-            value={v}
-            onChange={(e) => onChange(e.target.value)}
-            className={inputCls}
-          />
-        </div>
-        <p className="text-[11px] text-muted-foreground mt-1.5">
-          Paste an image URL (from Unsplash, your file hosting, etc.).
-        </p>
+        <ImageField value={(value as string) ?? ""} onChange={(v) => onChange(v)} />
+        {hintEl}
       </div>
     );
   }
