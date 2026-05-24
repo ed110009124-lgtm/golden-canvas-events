@@ -725,15 +725,23 @@ function FieldRenderer({
           {list.map((item, i) => (
             <details
               key={i}
-              open={list.length < 4}
+              open
               className="border border-gold/15 rounded-sm bg-black/20"
             >
               <summary className="cursor-pointer px-4 py-3 flex items-center justify-between gap-3 list-none">
-                <span className="text-white text-sm truncate">
-                  {field.itemLabel} {i + 1}
-                  {item.title || item.name || item.heading ? (
-                    <span className="text-white/60"> — {(item.title || item.name || item.heading) as string}</span>
-                  ) : null}
+                <span className="flex items-center gap-3 min-w-0">
+                  {(() => {
+                    const img = (item.image || item.img || item.cover || item.photo) as string | undefined;
+                    return img ? (
+                      <img src={img} alt="" className="w-10 h-10 object-cover border border-gold/20 flex-shrink-0" />
+                    ) : null;
+                  })()}
+                  <span className="text-white text-sm truncate">
+                    {field.itemLabel} {i + 1}
+                    {item.title || item.name || item.heading ? (
+                      <span className="text-white/60"> — {(item.title || item.name || item.heading) as string}</span>
+                    ) : null}
+                  </span>
                 </span>
                 <div className="flex gap-1" onClick={(e) => e.preventDefault()}>
                   <IconBtn onClick={() => move(i, -1)}><ChevronUp size={14} /></IconBtn>
